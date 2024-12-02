@@ -9,6 +9,10 @@ rpmbuild/SOURCES/
 rpmbuild/SPECS/djehuty.spec
 rpmbuild/SRPMS/
 autom4te.cache/
+.vscode/
+query.sparqlbook
+.gitignore
+djehuty.code-workspace
 aclocal.m4
 configure
 configure~

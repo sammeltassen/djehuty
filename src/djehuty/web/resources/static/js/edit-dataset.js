@@ -75,12 +75,6 @@ function preview_dataset (dataset_uuid, event) {
 }
 
 function gather_form_data () {
-    let categories   = jQuery("input[name='categories']:checked");
-    let category_ids = [];
-    for (let category of categories) {
-        category_ids.push(jQuery(category).val());
-    }
-
     let defined_type_name = null;
     if (jQuery("#upload_software").prop("checked")) {
         defined_type_name = "software";
@@ -103,6 +97,7 @@ function gather_form_data () {
     let form_data = {
         "title":          title,
         "description":    or_null(jQuery("#description .ql-editor").html()),
+        "categories":     or_null(jQuery("#categories").val()),
         "resource_title": or_null(jQuery("#resource_title").val()),
         "resource_doi":   or_null(jQuery("#resource_doi").val()),
         "geolocation":    or_null(jQuery("#geolocation").val()),
@@ -125,7 +120,6 @@ function gather_form_data () {
         "group_id":       group_id,
         "agreed_to_deposit_agreement": agreed_to_da,
         "agreed_to_publish": agreed_to_publish,
-        "categories":     category_ids
     };
 
     if (is_embargoed) {
@@ -256,11 +250,12 @@ function render_categories_for_dataset (dataset_uuid) {
         type:        "GET",
         accept:      "application/json",
     }).done(function (categories) {
+        jQuery("#categories-list tbody").empty();
         for (let category of categories) {
-            jQuery(`#category_${category["uuid"]}`).prop("checked", true);
-            jQuery(`#category_${category["parent_uuid"]}`).prop("checked", true);
-            jQuery(`#subcategories_${category["parent_uuid"]}`).show();
+            let row = `<tr><td>${category}<td><tr>`;
+            jQuery("categories-list tbody").append(row)
         }
+        jQuery("#categories-list").show();
     }).fail(function () {
         show_message ("failure", "<p>Failed to retrieve categories.</p>");
     });
